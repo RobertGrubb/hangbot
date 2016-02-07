@@ -1,0 +1,44 @@
+@import 'font-awesome';
+@import 'bourbon';
+@import 'neat';
+
+body {
+  margin: 0;
+  border-radius: 4px;
+}
+
+.container {
+  width: 500px;
+  height: 245px;
+
+  .appBar {
+    height: 40px;
+    width: 100%;
+    background-color: #333333;
+    text-indent: 10px;
+    line-height: 40px;
+    color: white;
+    font-size: 15px;
+  }
+
+  .content {
+    padding: 10px;
+
+    .half {
+      @include span-columns(6);
+    }
+
+    hr {
+      clear: both;
+    }
+
+    .url {
+      padding: 10px;
+      font-size: 18px;
+      width: 100%;
+      border: 0;
+      border-bottom: 1px solid #ddd;
+      border-radius: none;
+    }
+  }
+}
