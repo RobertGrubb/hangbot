@@ -5,6 +5,12 @@
   "description": "HangBot is a tool that loads Google Hangouts automatically based on settings you provide. No more having to remember those daily meeting times!",
   "version": "1.0",
 
+  "icons": {
+    "16": "ext/assets/images/icons/icon_16.png",
+    "48": "ext/assets/images/icons/icon_48.png",
+    "128": "ext/assets/images/icons/icon_128.png"
+  },
+
   "browser_action": {
     "default_popup": "ext/popup.html",
     "default_icon": "ext/assets/images/logos/logo.png"
