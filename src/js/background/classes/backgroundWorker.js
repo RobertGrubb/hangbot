@@ -7,9 +7,10 @@
 class backgroundWorker {
 
   // Class constructor
-  constructor(storage, listener) {
+  constructor(storage, startListener, stopListener) {
     this.storage = storage;
-    this.listener = listener;
+    this.startListener = startListener;
+    this.stopListener = stopListener;
   }
 
   // Initializes the background process
@@ -30,7 +31,7 @@ class backgroundWorker {
 
     // If initial data is set to start, call our startTimeListener method.
     if (this.storage.data.started === true) {
-      this.listener.start();
+      this.startListener.start();
     }
 
     // When local storage data changes, handle it here:
@@ -43,13 +44,14 @@ class backgroundWorker {
           // If started has changed, handle it
           case 'started':
 
-            // Start the listener
+            // Start the startListener
             if (storageChange.newValue === true) {
-              bgWorker.listener.start();
+              bgWorker.startListener.start();
 
-            // Stop the listener
+            // Stop all listeners
             } else {
-              bgWorker.listener.stop();
+              bgWorker.startListener.stop();
+              bgWorker.stopListener.stop();
             }
             break;
         };
