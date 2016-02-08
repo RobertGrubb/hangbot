@@ -91,6 +91,17 @@ class startListener {
         });
       });
 
+      chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
+        if (changeInfo.status != 'complete')
+          return;
+
+        if (tab.url.indexOf(listener.storage.data.url) != -1) {
+          chrome.tabs.executeScript(tabId, {
+            file: '/ext/assets/js/contentScripts.js'
+          });
+        }
+      });
+
       // Stop the listener
       listener.stop();
 
