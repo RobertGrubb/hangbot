@@ -7,10 +7,11 @@
 class startListener {
 
   // Class constructor
-  constructor (storage) {
+  constructor (storage, stopListener) {
     this.listener = null;
     this.refreshRate = 10;
     this.storage = storage;
+    this.stopListener = stopListener;
   }
 
   /**
@@ -21,6 +22,8 @@ class startListener {
    */
   start() {
     let listener = this;
+
+    console.log('-- startListener.start() fired --');
 
     // Make sure it's not already running
     if (this.listener === null) {
@@ -56,7 +59,10 @@ class startListener {
       // Set it to null
       this.listener = null;
       // Update the local storage
-      chrome.storage.local.set({started: false, tabId: false});
+      chrome.storage.local.set({
+        startListener: false,
+        tabId: false
+      });
     }
   }
 
@@ -87,6 +93,9 @@ class startListener {
 
       // Stop the listener
       listener.stop();
+
+      // Start the stopListener
+      listener.stopListener.start();
     } else {
 
       // Debug: if the tab exists, do nothing.
