@@ -1,6 +1,6 @@
 {
   "name": "hangbot",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "A google extension that auto-loads Google Hangouts",
   "devDependencies": {
     "babel-preset-es2015": "^6.3.13",

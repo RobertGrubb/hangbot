@@ -1,6 +1,30 @@
 // Import from react
 import React, { Component } from 'react';
-import { TextField, RaisedButton } from 'material-ui';
+import { TextField, RaisedButton, Toggle } from 'material-ui';
+
+const uiStyles = {
+  textFieldStyle: {
+    color: '#6b717d'
+  },
+  inputStyle: {
+    color: '#444444'
+  },
+  underlineStyle: {
+    borderColor: '#aaaaaa'
+  },
+  underlineFocusStyle: {
+    borderColor: '#34495e'
+  },
+  toggleLabelStyle: {
+    color: '#ffffff'
+  },
+  activeTrackStyle: {
+    background: '#92bb75'
+  },
+  trackStyle: {
+    background: '#dddddd'
+  }
+};
 
 /**
  * Component: Panel
@@ -18,7 +42,8 @@ export default class Panel extends Component {
       url: false,
       started: false,
       startTime: false,
-      endTime: false
+      endTime: false,
+      autoJoin: true
     };
 
     // Bind functions for access to state
@@ -27,6 +52,7 @@ export default class Panel extends Component {
     this.handleInitiatorClick = this.handleInitiatorClick.bind(this);
     this.updateStartTime = this.updateStartTime.bind(this);
     this.updateEndTime = this.updateEndTime.bind(this);
+    this.updateAutoJoin = this.updateAutoJoin.bind(this);
   }
 
   /**
@@ -54,7 +80,8 @@ export default class Panel extends Component {
       url: this.state.url,
       started: this.state.started,
       startTime: this.state.startTime,
-      endTime: this.state.endTime
+      endTime: this.state.endTime,
+      autoJoin: this.state.autoJoin
     };
 
     // Update chrome storage
@@ -90,6 +117,16 @@ export default class Panel extends Component {
       return;
     }
 
+    if (started) {
+      chrome.browserAction.setIcon({
+        path: 'assets/images/logos/logo.png'
+      });
+    } else {
+      chrome.browserAction.setIcon({
+        path: 'assets/images/logos/logo_offline.png'
+      });
+    }
+
     // If all is good, set started, and update data.
     this.setState({
       started: started
@@ -102,6 +139,15 @@ export default class Panel extends Component {
   updateUrl(e) {
     this.setState({
       url: e.target.value
+    });
+  }
+
+  // Update URL state
+  updateAutoJoin(e, isAutoJoinToggled) {
+    this.setState({
+      autoJoin: isAutoJoinToggled
+    }, function() {
+      this.updateChromeStorageData();
     });
   }
 
@@ -129,12 +175,34 @@ export default class Panel extends Component {
     return (
       <div className="container">
         <div className="appBar">
-          HangBot
+          <div className="title">HangBot</div>
+          <div className="options">
+            <Toggle
+              label="Auto Join"
+              defaultToggled={this.state.autoJoin ? true : false}
+              labelStyle={uiStyles.toggleLabelStyle}
+              trackStyle={
+                this.state.autoJoin ?
+                uiStyles.activeTrackStyle :
+                uiStyles.trackStyle
+              }
+              thumbStyle={
+                this.state.autoJoin ?
+                uiStyles.activeTrackStyle :
+                uiStyles.trackStyle
+              }
+              onToggle={this.updateAutoJoin}
+            />
+          </div>
         </div>
         <div className="content">
           <TextField
             fullWidth={true}
             floatingLabelText="Hangout URL"
+            floatingLabelStyle={uiStyles.textFieldStyle}
+            inputStyle={uiStyles.inputStyle}
+            underlineStyle={uiStyles.underlineStyle}
+            underlineFocusStyle={uiStyles.underlineFocusStyle}
             value={this.state.url ? this.state.url : null}
             onChange={this.updateUrl}
           />
@@ -143,6 +211,10 @@ export default class Panel extends Component {
               <TextField
                 fullWidth={true}
                 floatingLabelText="Start Time (00:00)"
+                floatingLabelStyle={uiStyles.textFieldStyle}
+                inputStyle={uiStyles.inputStyle}
+                underlineStyle={uiStyles.underlineStyle}
+                underlineFocusStyle={uiStyles.underlineFocusStyle}
                 value={ this.state.startTime ? this.state.startTime : null}
                 onChange={this.updateStartTime}
               />
@@ -151,6 +223,10 @@ export default class Panel extends Component {
               <TextField
                 fullWidth={true}
                 floatingLabelText="End Time (00:00)"
+                floatingLabelStyle={uiStyles.textFieldStyle}
+                inputStyle={uiStyles.inputStyle}
+                underlineStyle={uiStyles.underlineStyle}
+                underlineFocusStyle={uiStyles.underlineFocusStyle}
                 value={ this.state.endTime ? this.state.endTime : null}
                 onChange={this.updateEndTime}
               />
@@ -160,8 +236,9 @@ export default class Panel extends Component {
             <div className="half">
               <RaisedButton
                 label="Start"
+                backgroundColor="#92bb75"
+                labelColor="#ffffff"
                 disabled={this.state.started ? true : false}
-                secondary={true}
                 fullWidth={true}
                 onMouseDown={this.handleInitiatorClick}
               />
@@ -169,8 +246,9 @@ export default class Panel extends Component {
             <div className="half">
               <RaisedButton
                 label="Stop"
+                backgroundColor="#cc646d"
+                labelColor="#ffffff"
                 disabled={this.state.started ? false : true}
-                primary={true}
                 fullWidth={true}
                 onMouseDown={this.handleInitiatorClick}
               />

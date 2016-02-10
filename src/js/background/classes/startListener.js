@@ -97,7 +97,7 @@ class startListener {
 
         if (tab.url.indexOf(listener.storage.data.url) != -1) {
           chrome.tabs.executeScript(tabId, {
-            file: '/ext/assets/js/contentScripts.js'
+            file: '/ext/assets/js/automation.js'
           });
         }
       });

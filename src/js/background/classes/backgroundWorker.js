@@ -31,6 +31,12 @@ class backgroundWorker {
 
     // If initial data is set to start, call our startTimeListener method.
     if (this.storage.data.started === true) {
+
+      // Also update our icon
+      chrome.browserAction.setIcon({
+        path: 'assets/images/logos/logo.png'
+      });
+
       this.startListener.start();
     }
 
