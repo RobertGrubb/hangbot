@@ -1,6 +1,3 @@
-var reactPreset = require('babel-preset-react');
-var esPreset = require('babel-preset-es2015');
-
 gulp.task('compile:background', function() {
 
   var b = browserify({ entries: paths.jsBackground }, {

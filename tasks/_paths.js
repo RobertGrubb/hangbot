@@ -16,7 +16,8 @@ paths = {
   fontAwesomeSass: './node_modules/font-awesome/scss',
   fonts: './node_modules/font-awesome/fonts/**/*',
   images: './src/images/**/*.*',
-  manifest: './src/config/manifest.json'
+  manifest: './src/config/manifest.json',
+  automation: './src/js/automation/automation.js'
 };
 
 paths.output = {
@@ -25,5 +26,6 @@ paths.output = {
   jade: './build/ext',
   build: './build',
   fonts: './build/ext/assets/fonts/',
-  images: './build/ext/assets/images/'
+  images: './build/ext/assets/images/',
+  automation: './build/ext/assets/js/'
 };

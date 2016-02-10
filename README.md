@@ -19,14 +19,14 @@ created. Simply choose the build directory when loading the extension into Chrom
 ## TODO
 
 1. Add set to the chrome-storage lib.
-2. Add listener for end time to close hangout
+2. Add listener for end time to close hangout [done]
 3. Add check for in-between times if hangout is not open.
-4. Add option to `auto-join` hangout (Bypass the join button)
+4. Add option to `auto-join` hangout (Bypass the join button) [done]
 5. Add desktop notification for load-warning.
 6. Add better time selector for start/end time.
 7. Add better validation for times.
 8. Add validation to only allow hangout urls.
-9. Improve UI / Add icons.
+9. Improve UI [done]
 
 ## Possible Future Features
 

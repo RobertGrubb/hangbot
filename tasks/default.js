@@ -5,6 +5,7 @@ gulp.task('default', [
   'compile:sass',
   'compile:background',
   'compile:popup',
+  'compile:automation',
   'move:images',
   'move:fonts'
 ]);

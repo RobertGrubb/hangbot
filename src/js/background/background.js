@@ -1,5 +1,5 @@
 // Imports
-import chromeStorage from './lib/chrome-storage';
+import chromeStorage from '../lib/chrome-storage';
 import backgroundWorker from './classes/backgroundWorker.js';
 import startListener from './classes/startListener.js';
 import stopListener from './classes/stopListener.js';
