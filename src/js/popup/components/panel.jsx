@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import { TextField, RaisedButton, Toggle } from 'material-ui';
 
+// UI Styles:
 const uiStyles = {
   textFieldStyle: {
     color: '#6b717d'
@@ -98,8 +99,6 @@ export default class Panel extends Component {
       console.log('--- Chrome Storage Data Set ---');
       console.log(data);
     });
-
-
   }
 
   // If start/stop is clicked, it is handled here.
@@ -108,6 +107,7 @@ export default class Panel extends Component {
     // Set var oppisite of current state so we can toggle.
     let started = this.state.started ? false : true;
 
+    // Update browserAction icon according to start state.
     if (started) {
       chrome.browserAction.setIcon({
         path: 'assets/images/logos/logo.png'
@@ -160,7 +160,7 @@ export default class Panel extends Component {
     });
   }
 
-  // Update startTime state
+  // Update startHour state
   updateStartHour(e) {
     let string = e.target.value;
 
@@ -169,6 +169,7 @@ export default class Panel extends Component {
     });
   }
 
+  // Update startMins state
   updateStartMins(e) {
     let string = e.target.value;
 
@@ -177,7 +178,7 @@ export default class Panel extends Component {
     });
   }
 
-  // Update endTime state
+  // Update endHour state
   updateEndHour(e) {
     let string = e.target.value;
 
@@ -186,6 +187,7 @@ export default class Panel extends Component {
     });
   }
 
+  // Update endMins state
   updateEndMins(e) {
     let string = e.target.value;
 

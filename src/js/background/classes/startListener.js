@@ -97,26 +97,35 @@ class startListener {
         });
       });
 
+      // Listen for updates on the tab when it is created:
       chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
+
+        // If tab is not done loading, do nothing
         if (changeInfo.status != 'complete')
           return;
 
+        // Make sure the current url is matching to the storage data.
         if (tab.url.indexOf(listener.storage.data.url) != -1) {
 
-          var scripts = [];
+          // Setup array for scripts
+          let scripts = [];
 
+          // If auto join is enabled:
           if (listener.storage.data.autoJoin) {
             scripts.push('/ext/assets/js/automation/join.bundle.js');
           }
 
+          // If disable cam is enabled:
           if (listener.storage.data.disableCam) {
             scripts.push('/ext/assets/js/automation/disable-cam.bundle.js');
           }
 
+          // If disable mic is enabled:
           if (listener.storage.data.disableMic) {
             scripts.push('/ext/assets/js/automation/disable-mic.bundle.js');
           }
 
+          // Iterate through each and execute the script.
           scripts.map(function(file) {
             chrome.tabs.executeScript(tabId, {
               file: file
