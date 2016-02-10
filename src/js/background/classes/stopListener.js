@@ -25,8 +25,12 @@ class stopListener {
         // Construct string to compare to
         let timeString = hours + ':' + mins;
 
+        let endTime = listener.storage.data.endHour +
+                      ':' +
+                      listener.storage.data.endMins;
+
         // If the startTime is the current time
-        if (listener.storage.data.endTime === timeString) {
+        if (endTime === timeString) {
 
           let tabId = listener.storage.data.tabId;
 
