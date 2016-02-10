@@ -18,11 +18,8 @@ const uiStyles = {
   toggleLabelStyle: {
     color: '#ffffff'
   },
-  activeTrackStyle: {
-    background: '#92bb75'
-  },
-  trackStyle: {
-    background: '#dddddd'
+  toggleOptionStyle: {
+    margin: '10px 0'
   }
 };
 
@@ -41,18 +38,26 @@ export default class Panel extends Component {
     this.state = {
       url: false,
       started: false,
-      startTime: false,
-      endTime: false,
-      autoJoin: true
+      startHour: false,
+      startMins: false,
+      endHour: false,
+      endMins: false,
+      autoJoin: false,
+      disableCam: false,
+      disableMic: false
     };
 
     // Bind functions for access to state
     this.updateUrl = this.updateUrl.bind(this);
     this.updateChromeStorageData = this.updateChromeStorageData.bind(this);
     this.handleInitiatorClick = this.handleInitiatorClick.bind(this);
-    this.updateStartTime = this.updateStartTime.bind(this);
-    this.updateEndTime = this.updateEndTime.bind(this);
+    this.updateStartHour = this.updateStartHour.bind(this);
+    this.updateStartMins = this.updateStartMins.bind(this);
+    this.updateEndHour = this.updateEndHour.bind(this);
+    this.updateEndMins = this.updateEndMins.bind(this);
     this.updateAutoJoin = this.updateAutoJoin.bind(this);
+    this.updateDisableCam = this.updateDisableCam.bind(this);
+    this.updateDisableMic = this.updateDisableMic.bind(this);
   }
 
   /**
@@ -79,9 +84,13 @@ export default class Panel extends Component {
     let data = {
       url: this.state.url,
       started: this.state.started,
-      startTime: this.state.startTime,
-      endTime: this.state.endTime,
-      autoJoin: this.state.autoJoin
+      startHour: this.state.startHour,
+      startMins: this.state.startMins,
+      endHour: this.state.endHour,
+      endMins: this.state.endMins,
+      autoJoin: this.state.autoJoin,
+      disableCam: this.state.disableCam,
+      disableMic: this.state.disableMic
     };
 
     // Update chrome storage
@@ -93,29 +102,11 @@ export default class Panel extends Component {
 
   }
 
-  // Make sure times are valid
-  checkTimes() {
-
-    if (this.state.startTime && this.state.endTime) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
   // If start/stop is clicked, it is handled here.
   handleInitiatorClick() {
 
     // Set var oppisite of current state so we can toggle.
     let started = this.state.started ? false : true;
-
-    // Initiate timeCheck
-    let timeCheck = this.checkTimes();
-
-    // If timeCheck is false, end here.
-    if (started && timeCheck === false) {
-      return;
-    }
 
     if (started) {
       chrome.browserAction.setIcon({
@@ -151,21 +142,55 @@ export default class Panel extends Component {
     });
   }
 
+  // Update Disable Cam
+  updateDisableCam(e, isAutoDisableCamToggled) {
+    this.setState({
+      disableCam: isAutoDisableCamToggled
+    }, function() {
+      this.updateChromeStorageData();
+    });
+  }
+
+  // Update Disable Mic
+  updateDisableMic(e, isAutoDisableMicToggled) {
+    this.setState({
+      disableMic: isAutoDisableMicToggled
+    }, function() {
+      this.updateChromeStorageData();
+    });
+  }
+
   // Update startTime state
-  updateStartTime(e) {
+  updateStartHour(e) {
     let string = e.target.value;
 
     this.setState({
-      startTime: string
+      startHour: string
+    });
+  }
+
+  updateStartMins(e) {
+    let string = e.target.value;
+
+    this.setState({
+      startMins: string
     });
   }
 
   // Update endTime state
-  updateEndTime(e) {
+  updateEndHour(e) {
     let string = e.target.value;
 
     this.setState({
-      endTime: string
+      endHour: string
+    });
+  }
+
+  updateEndMins(e) {
+    let string = e.target.value;
+
+    this.setState({
+      endMins: string
     });
   }
 
@@ -179,18 +204,8 @@ export default class Panel extends Component {
           <div className="options">
             <Toggle
               label="Auto Join"
-              defaultToggled={this.state.autoJoin ? true : false}
+              toggled={this.state.autoJoin ? true : false}
               labelStyle={uiStyles.toggleLabelStyle}
-              trackStyle={
-                this.state.autoJoin ?
-                uiStyles.activeTrackStyle :
-                uiStyles.trackStyle
-              }
-              thumbStyle={
-                this.state.autoJoin ?
-                uiStyles.activeTrackStyle :
-                uiStyles.trackStyle
-              }
               onToggle={this.updateAutoJoin}
             />
           </div>
@@ -198,7 +213,7 @@ export default class Panel extends Component {
         <div className="content">
           <TextField
             fullWidth={true}
-            floatingLabelText="Hangout URL"
+            floatingLabelText="Hangout ID"
             floatingLabelStyle={uiStyles.textFieldStyle}
             inputStyle={uiStyles.inputStyle}
             underlineStyle={uiStyles.underlineStyle}
@@ -208,30 +223,83 @@ export default class Panel extends Component {
           />
           <div>
             <div className="half">
-              <TextField
-                fullWidth={true}
-                floatingLabelText="Start Time (00:00)"
-                floatingLabelStyle={uiStyles.textFieldStyle}
-                inputStyle={uiStyles.inputStyle}
-                underlineStyle={uiStyles.underlineStyle}
-                underlineFocusStyle={uiStyles.underlineFocusStyle}
-                value={ this.state.startTime ? this.state.startTime : null}
-                onChange={this.updateStartTime}
+              <h4>Start Time</h4>
+              <div className="half">
+                <TextField
+                  fullWidth={true}
+                  floatingLabelText="Hour"
+                  floatingLabelStyle={uiStyles.textFieldStyle}
+                  inputStyle={uiStyles.inputStyle}
+                  underlineStyle={uiStyles.underlineStyle}
+                  underlineFocusStyle={uiStyles.underlineFocusStyle}
+                  value={ this.state.startHour && this.state.startHour}
+                  onChange={this.updateStartHour}
+                  type="number"
+                />
+              </div>
+              <div className="half">
+                <TextField
+                  fullWidth={true}
+                  floatingLabelText="Minutes"
+                  floatingLabelStyle={uiStyles.textFieldStyle}
+                  inputStyle={uiStyles.inputStyle}
+                  underlineStyle={uiStyles.underlineStyle}
+                  underlineFocusStyle={uiStyles.underlineFocusStyle}
+                  value={ this.state.startMins && this.state.startMins}
+                  onChange={this.updateStartMins}
+                  type="number"
+                />
+              </div>
+            </div>
+            <div className="half">
+              <h4>End Time</h4>
+              <div className="half">
+                <TextField
+                  fullWidth={true}
+                  floatingLabelText="Hours"
+                  floatingLabelStyle={uiStyles.textFieldStyle}
+                  inputStyle={uiStyles.inputStyle}
+                  underlineStyle={uiStyles.underlineStyle}
+                  underlineFocusStyle={uiStyles.underlineFocusStyle}
+                  value={ this.state.endHour && this.state.endHour}
+                  onChange={this.updateEndHour}
+                />
+              </div>
+              <div className="half">
+                <TextField
+                  fullWidth={true}
+                  floatingLabelText="Minutes"
+                  floatingLabelStyle={uiStyles.textFieldStyle}
+                  inputStyle={uiStyles.inputStyle}
+                  underlineStyle={uiStyles.underlineStyle}
+                  underlineFocusStyle={uiStyles.underlineFocusStyle}
+                  value={ this.state.endMins ? this.state.endMins : null}
+                  onChange={this.updateEndMins}
+                />
+              </div>
+            </div>
+          </div>
+          <div className="optionContainer">
+            <div className="half">
+              <Toggle
+                label="Disable Camera"
+                labelPosition="right"
+                toggled={this.state.disableCam ? true : false}
+                style={uiStyles.toggleOptionStyle}
+                onToggle={this.updateDisableCam}
               />
             </div>
             <div className="half">
-              <TextField
-                fullWidth={true}
-                floatingLabelText="End Time (00:00)"
-                floatingLabelStyle={uiStyles.textFieldStyle}
-                inputStyle={uiStyles.inputStyle}
-                underlineStyle={uiStyles.underlineStyle}
-                underlineFocusStyle={uiStyles.underlineFocusStyle}
-                value={ this.state.endTime ? this.state.endTime : null}
-                onChange={this.updateEndTime}
+              <Toggle
+                label="Disable Mic"
+                labelPosition="right"
+                toggled={this.state.disableMic ? true : false}
+                style={uiStyles.toggleOptionStyle}
+                onToggle={this.updateDisableMic}
               />
             </div>
           </div>
+          <hr />
           <div>
             <div className="half">
               <RaisedButton

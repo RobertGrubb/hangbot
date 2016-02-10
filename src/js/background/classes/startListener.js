@@ -38,8 +38,12 @@ class startListener {
         // Construct string to compare to
         let timeString = hours + ':' + mins;
 
+        let startTime = listener.storage.data.startHour +
+                        ':' +
+                        listener.storage.data.startMins;
+
         // If the startTime is the current time
-        if (listener.storage.data.startTime === timeString) {
+        if (startTime === timeString) {
 
           // Open the hangout
           listener.openTab();
@@ -75,8 +79,10 @@ class startListener {
     // If tabId is false, we can start a tab
     if (!this.storage.data.tabId) {
 
+      let hangoutUrlPrefix = 'https://hangouts.google.com/hangouts/_/';
+
       // Create the tab that will open the hangout
-      chrome.tabs.create({ url: listener.storage.data.url }, function(tab) {
+      chrome.tabs.create({ url: hangoutUrlPrefix + listener.storage.data.url }, function(tab) {
 
         // Store the tab id
         chrome.storage.local.set({tabId: tab.id});
@@ -101,8 +107,14 @@ class startListener {
 
           if (listener.storage.data.autoJoin) {
             scripts.push('/ext/assets/js/automation/join.bundle.js');
-            scripts.push('/ext/assets/js/automation/disable-mic.bundle.js');
+          }
+
+          if (listener.storage.data.disableCam) {
             scripts.push('/ext/assets/js/automation/disable-cam.bundle.js');
+          }
+
+          if (listener.storage.data.disableMic) {
+            scripts.push('/ext/assets/js/automation/disable-mic.bundle.js');
           }
 
           scripts.map(function(file) {
