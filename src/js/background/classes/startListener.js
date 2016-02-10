@@ -96,9 +96,12 @@ class startListener {
           return;
 
         if (tab.url.indexOf(listener.storage.data.url) != -1) {
-          chrome.tabs.executeScript(tabId, {
-            file: '/ext/assets/js/automation.js'
-          });
+
+          if (listener.storage.data.autoJoin) {
+            chrome.tabs.executeScript(tabId, {
+              file: '/ext/assets/js/automation.js'
+            });
+          }
         }
       });
 

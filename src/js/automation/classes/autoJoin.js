@@ -4,8 +4,7 @@ import $ from 'jquery';
 
 class autoJoin {
 
-  constructor(storage) {
-    this.storage = storage;
+  constructor() {
     this.intervalRate = 5; // Seconds
     this.listener = null;
   }
@@ -16,23 +15,19 @@ class autoJoin {
   initialize() {
 
     let thisClass = this;
-    this.storage.getInitialData();
 
-    if (this.storage.data.autoJoin) {
+    this.listener = setInterval(function() {
 
-      this.listener = setInterval(function() {
+      let joinButton = $('div[role="button"]').filter(function() {
+        return $(this).text() == "Join"
+      })[0];
 
-        let joinButton = $('div[role="button"]').filter(function() {
-          return $(this).text() == "Join"
-        })[0];
-
-        if (joinButton) {
-          events.doClick(joinButton);
-          clearInterval(thisClass.listener);
-          thisClass.listener = null;
-        }
-      }, 1000 * thisClass.intervalRate);
-    }
+      if (joinButton) {
+        events.doClick(joinButton);
+        clearInterval(thisClass.listener);
+        thisClass.listener = null;
+      }
+    }, 1000 * thisClass.intervalRate);
   }
 }
 
