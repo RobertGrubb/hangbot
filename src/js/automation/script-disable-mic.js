@@ -2,7 +2,7 @@ import Events from './classes/events.js';
 const events = new Events();
 import $ from 'jquery';
 
-class autoJoin {
+class disableMic {
 
   constructor() {
     this.listener = null;
@@ -12,18 +12,16 @@ class autoJoin {
     let thisClass = this;
 
     this.listener = setInterval(function() {
-      let joinButton = $('div[role="button"]').filter(function() {
-        return $(this).text() == "Join"
-      })[0];
+      let micButton = $('div[role="button"][aria-label="Mute microphone"]')[0];
 
-      if (joinButton) {
-        events.doClick(joinButton);
+      if (micButton) {
+        events.doClick(micButton);
         clearInterval(thisClass.listener);
         thisClass.listener = null;
       }
-    }, 1000 * 7);
+    }, 1000 * 5);
   }
 }
 
-const AutoJoin = new autoJoin();
-AutoJoin.initialize();
+const DisableMic = new disableMic();
+DisableMic.initialize();

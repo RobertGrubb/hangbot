@@ -101,6 +101,8 @@ class startListener {
 
           if (listener.storage.data.autoJoin) {
             scripts.push('/ext/assets/js/automation/join.bundle.js');
+            scripts.push('/ext/assets/js/automation/disable-mic.bundle.js');
+            scripts.push('/ext/assets/js/automation/disable-cam.bundle.js');
           }
 
           scripts.map(function(file) {
