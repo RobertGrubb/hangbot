@@ -17,7 +17,7 @@ paths = {
   fonts: './node_modules/font-awesome/fonts/**/*',
   images: './src/images/**/*.*',
   manifest: './src/config/manifest.json',
-  automation: './src/js/automation/automation.js'
+  automation: './src/js/automation/**/script-*.js'
 };
 
 paths.output = {
@@ -27,5 +27,5 @@ paths.output = {
   build: './build',
   fonts: './build/ext/assets/fonts/',
   images: './build/ext/assets/images/',
-  automation: './build/ext/assets/js/'
+  automation: './build/ext/assets/js/automation/'
 };
