@@ -97,11 +97,17 @@ class startListener {
 
         if (tab.url.indexOf(listener.storage.data.url) != -1) {
 
+          var scripts = [];
+
           if (listener.storage.data.autoJoin) {
-            chrome.tabs.executeScript(tabId, {
-              file: '/ext/assets/js/automation.js'
-            });
+            scripts.push('/ext/assets/js/automation/join.bundle.js');
           }
+
+          scripts.map(function(file) {
+            chrome.tabs.executeScript(tabId, {
+              file: file
+            });
+          });
         }
       });
 

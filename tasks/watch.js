@@ -7,5 +7,4 @@ gulp.task('watch', ['default'], function() {
     "compile:popup",
     "compile:automation"
   ]);
-  gulp.watch([paths.automation], ["compile:automation"]);
 });
