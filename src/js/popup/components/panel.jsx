@@ -1,6 +1,10 @@
 // Import from react
 import React, { Component } from 'react';
-import { TextField, RaisedButton, Toggle } from 'material-ui';
+import {
+  TextField,
+  RaisedButton,
+  Toggle
+} from 'material-ui';
 
 // UI Styles:
 const uiStyles = {
@@ -41,8 +45,10 @@ export default class Panel extends Component {
       started: false,
       startHour: false,
       startMins: false,
+      startMeridiem: 'AM',
       endHour: false,
       endMins: false,
+      endMeridiem: 'PM',
       autoJoin: false,
       disableCam: false,
       disableMic: false
@@ -54,8 +60,10 @@ export default class Panel extends Component {
     this.handleInitiatorClick = this.handleInitiatorClick.bind(this);
     this.updateStartHour = this.updateStartHour.bind(this);
     this.updateStartMins = this.updateStartMins.bind(this);
+    this.updateStartMeridiem = this.updateStartMeridiem.bind(this);
     this.updateEndHour = this.updateEndHour.bind(this);
     this.updateEndMins = this.updateEndMins.bind(this);
+    this.updateEndMeridiem = this.updateEndMeridiem.bind(this);
     this.updateAutoJoin = this.updateAutoJoin.bind(this);
     this.updateDisableCam = this.updateDisableCam.bind(this);
     this.updateDisableMic = this.updateDisableMic.bind(this);
@@ -79,26 +87,23 @@ export default class Panel extends Component {
   // Update chrome storage here.
   updateChromeStorageData() {
 
-    console.log('--- updateChromeStorageData Called ---');
-
     // Setup data with state
     let data = {
       url: this.state.url,
       started: this.state.started,
       startHour: this.state.startHour,
       startMins: this.state.startMins,
+      startMeridiem: this.state.startMeridiem,
       endHour: this.state.endHour,
       endMins: this.state.endMins,
+      endMeridiem: this.state.endMeridiem,
       autoJoin: this.state.autoJoin,
       disableCam: this.state.disableCam,
       disableMic: this.state.disableMic
     };
 
     // Update chrome storage
-    chrome.storage.local.set(data, function() {
-      console.log('--- Chrome Storage Data Set ---');
-      console.log(data);
-    });
+    chrome.storage.local.set(data);
   }
 
   // If start/stop is clicked, it is handled here.
@@ -160,39 +165,85 @@ export default class Panel extends Component {
     });
   }
 
+  hourFormat(string) {
+
+    let hour = parseInt(string);
+
+    if (hour < 1) {
+      return 12;
+    } else if (hour > 12) {
+      return 1;
+    } else {
+      return hour;
+    }
+  }
+
+  minFormat(string) {
+
+    let minutes = parseInt(string);
+
+    if (minutes < 0 || minutes > 59) {
+      return '00';
+    } else if (minutes === 0 || minutes < 10) {
+      return '0' + minutes;
+    } else {
+      return minutes;
+    }
+  }
+
   // Update startHour state
   updateStartHour(e) {
-    let string = e.target.value;
+    let hour = e.target.value;
+    hour = this.hourFormat(hour);
 
     this.setState({
-      startHour: string
+      startHour: hour
     });
   }
 
   // Update startMins state
   updateStartMins(e) {
-    let string = e.target.value;
+    let minutes = e.target.value;
+    minutes = this.minFormat(minutes);
 
     this.setState({
-      startMins: string
+      startMins: minutes
+    });
+  }
+
+  updateStartMeridiem(e) {
+    let meridiem = e.target.value;
+
+    this.setState({
+      startMeridiem: meridiem
     });
   }
 
   // Update endHour state
   updateEndHour(e) {
-    let string = e.target.value;
+    let hour = e.target.value;
+    hour = this.hourFormat(hour);
 
     this.setState({
-      endHour: string
+      endHour: hour
     });
   }
 
   // Update endMins state
   updateEndMins(e) {
-    let string = e.target.value;
+    let minutes = e.target.value;
+    minutes = this.minFormat(minutes);
 
     this.setState({
-      endMins: string
+      endMins: minutes
+    });
+  }
+
+  updateEndMeridiem(e) {
+    let meridiem = e.target.value;
+
+    this.setState({
+      endMeridiem: meridiem
     });
   }
 
@@ -226,58 +277,78 @@ export default class Panel extends Component {
           <div>
             <div className="half">
               <h4>Start Time</h4>
-              <div className="half">
+              <div className="fourth">
                 <TextField
                   fullWidth={true}
-                  floatingLabelText="Hour"
                   floatingLabelStyle={uiStyles.textFieldStyle}
                   inputStyle={uiStyles.inputStyle}
                   underlineStyle={uiStyles.underlineStyle}
                   underlineFocusStyle={uiStyles.underlineFocusStyle}
-                  value={ this.state.startHour && this.state.startHour}
+                  value={this.state.startHour ? this.state.startHour : '12'}
                   onChange={this.updateStartHour}
                   type="number"
                 />
               </div>
-              <div className="half">
+              <div className="fourth">
                 <TextField
                   fullWidth={true}
-                  floatingLabelText="Minutes"
                   floatingLabelStyle={uiStyles.textFieldStyle}
                   inputStyle={uiStyles.inputStyle}
                   underlineStyle={uiStyles.underlineStyle}
                   underlineFocusStyle={uiStyles.underlineFocusStyle}
-                  value={ this.state.startMins && this.state.startMins}
+                  value={this.state.startMins ? this.state.startMins : '00'}
                   onChange={this.updateStartMins}
                   type="number"
                 />
               </div>
+              <div className="thirds">
+                <div className="optionBlock">
+                  <select onChange={this.updateStartMeridiem} value={
+                      this.state.startMeridiem ?
+                      this.state.startMeridiem : 'AM'
+                  }>
+                    <option>AM</option>
+                    <option>PM</option>
+                  </select>
+                </div>
+              </div>
             </div>
             <div className="half">
               <h4>End Time</h4>
-              <div className="half">
+              <div className="fourth">
                 <TextField
                   fullWidth={true}
-                  floatingLabelText="Hours"
                   floatingLabelStyle={uiStyles.textFieldStyle}
                   inputStyle={uiStyles.inputStyle}
                   underlineStyle={uiStyles.underlineStyle}
                   underlineFocusStyle={uiStyles.underlineFocusStyle}
-                  value={ this.state.endHour && this.state.endHour}
+                  value={this.state.endHour ? this.state.endHour : '11'}
                   onChange={this.updateEndHour}
+                  type="number"
                 />
               </div>
-              <div className="half">
+              <div className="fourth">
                 <TextField
                   fullWidth={true}
-                  floatingLabelText="Minutes"
                   floatingLabelStyle={uiStyles.textFieldStyle}
                   inputStyle={uiStyles.inputStyle}
                   underlineStyle={uiStyles.underlineStyle}
                   underlineFocusStyle={uiStyles.underlineFocusStyle}
-                  value={ this.state.endMins ? this.state.endMins : null}
+                  value={this.state.endMins ? this.state.endMins : '59'}
                   onChange={this.updateEndMins}
+                  type="number"
                 />
+              </div>
+              <div className="thirds">
+                <div className="optionBlock">
+                  <select onChange={this.updateEndMeridiem} value={
+                      this.state.endMeridiem ?
+                      this.state.endMeridiem : 'PM'
+                  }>
+                    <option>AM</option>
+                    <option>PM</option>
+                  </select>
+                </div>
               </div>
             </div>
           </div>

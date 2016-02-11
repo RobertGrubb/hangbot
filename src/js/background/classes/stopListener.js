@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 class stopListener {
 
   constructor(storage) {
@@ -10,27 +12,22 @@ class stopListener {
   start() {
     let listener = this;
 
-    console.log('-- stopListener.start() fired --');
-
     // Make sure it's not already running
     if (this.listener === null) {
 
       this.listener = setInterval(function() {
 
         // Get current time data
-        let d = new Date();
-        let hours = d.getHours();
-        let mins  = d.getMinutes();
-
-        // Construct string to compare to
-        let timeString = hours + ':' + mins;
+        let now = moment().format('h:mm A');
 
         let endTime = listener.storage.data.endHour +
                       ':' +
-                      listener.storage.data.endMins;
+                      listener.storage.data.endMins +
+                      ' ' +
+                      listener.storage.data.endMeridiem;
 
         // If the startTime is the current time
-        if (endTime === timeString) {
+        if (endTime === now) {
 
           let tabId = listener.storage.data.tabId;
 

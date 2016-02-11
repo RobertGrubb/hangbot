@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 /**
  * Class: startListener
  *
@@ -7,11 +9,13 @@
 class startListener {
 
   // Class constructor
-  constructor (storage, stopListener) {
+  constructor (storage, stopListener, notifications) {
     this.listener = null;
     this.refreshRate = 10;
     this.storage = storage;
     this.stopListener = stopListener;
+    this.notifications = notifications;
+    this.notified = false;
   }
 
   /**
@@ -23,27 +27,37 @@ class startListener {
   start() {
     let listener = this;
 
-    console.log('-- startListener.start() fired --');
-
     // Make sure it's not already running
     if (this.listener === null) {
 
       this.listener = setInterval(function() {
 
         // Get current time data
-        let d = new Date();
-        let hours = d.getHours();
-        let mins  = d.getMinutes();
-
-        // Construct string to compare to
-        let timeString = hours + ':' + mins;
+        let now = moment().format('h:mm A');
 
         let startTime = listener.storage.data.startHour +
                         ':' +
-                        listener.storage.data.startMins;
+                        listener.storage.data.startMins +
+                        ' ' +
+                        listener.storage.data.startMeridiem;
+
+        // Get 5 minutes before start time for notification
+        let oneMinuteBefore = moment(startTime, 'h:mm A')
+          .subtract(1, 'minutes')
+          .format('h:mm A');
+
+        if (oneMinuteBefore === now && !listener.notified) {
+          // Notifiy:
+          listener.notifications.showNotification(
+            'HangBot is Excited!',
+            'This is a friendly reminder that your hangout will be starting in 1 minute.'
+          );
+
+          listener.notified = true;
+        }
 
         // If the startTime is the current time
-        if (startTime === timeString) {
+        if (startTime === now) {
 
           // Open the hangout
           listener.openTab();
@@ -139,10 +153,6 @@ class startListener {
 
       // Start the stopListener
       listener.stopListener.start();
-    } else {
-
-      // Debug: if the tab exists, do nothing.
-      console.log('-- openHangout() fired, but tab exists. --');
     }
   }
 }

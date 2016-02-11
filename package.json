@@ -19,6 +19,7 @@
     "gulp-sass": "^2.0.4",
     "lodash": "^4.2.1",
     "material-ui": "^0.14.4",
+    "moment": "^2.11.2",
     "node-bourbon": "^4.2.3",
     "node-neat": "^1.7.2",
     "opn": "^3.0.2",
