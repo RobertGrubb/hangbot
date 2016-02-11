@@ -32,6 +32,11 @@ class startListener {
 
       this.listener = setInterval(function() {
 
+        moment.createFromInputFallback = function(config) {
+          // unreliable string magic, or
+          config._d = new Date(config._i);
+        };
+
         // Get current time data
         let now = moment().format('h:mm A');
 
