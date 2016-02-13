@@ -13,20 +13,7 @@ to start hangouts. We've got you covered!
 
 0. The manifest.json file lives inside of the build directory after it is
 created. Simply choose the build directory when loading the extension into Chrome.
-0. Remember to Reload the extension between any changes.
-
-
-## TODO
-
-0. [ ] Add set to the chrome-storage lib.
-0. [x] ~~Add check for in-between times if hangout is not open.~~
-0. [x] ~~Add better validation for times.~~
-0. [x] ~~Add desktop notification for load-warning.~~
-0. [x] ~~Add better time selector for start/end time.~~
-0. [x] ~~Add validation to only allow hangout urls.~~
-0. [x] ~~Add option to `auto-join` hangout (Bypass the join button)~~
-0. [x] ~~Add listener for end time to close hangout~~
-0. [x] ~~Improve basic UI~~
+0. Remember to reload the extension between any changes.
 
 ## Future Features
 
