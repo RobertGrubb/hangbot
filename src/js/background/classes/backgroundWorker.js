@@ -20,25 +20,25 @@ class backgroundWorker {
     let bgWorker = this;
 
     // Set initial data from chrome.storage
-    this.storage.getInitialData();
+    this.storage.getAll(function(data) {
 
+      // If tab exists on load, remove it.
+      if (data.tabId) {
+        chrome.tabs.remove(data.tabId);
+        chrome.storage.local.set({tabId: false});
+      }
 
-    // If tab exists on load, remove it.
-    if (this.storage.data.tabId) {
-      chrome.tabs.remove(tabId);
-      chrome.storage.local.set({tabId: false});
-    }
+      // If initial data is set to start, call our startTimeListener method.
+      if (data.started === true) {
 
-    // If initial data is set to start, call our startTimeListener method.
-    if (this.storage.data.started === true) {
+        // Also update our icon
+        chrome.browserAction.setIcon({
+          path: 'assets/images/logos/logo.png'
+        });
 
-      // Also update our icon
-      chrome.browserAction.setIcon({
-        path: 'assets/images/logos/logo.png'
-      });
-
-      this.startListener.start();
-    }
+        bgWorker.startListener.start();
+      }
+    });
 
     // When local storage data changes, handle it here:
     chrome.storage.onChanged.addListener(function(changes, namespace) {

@@ -19,8 +19,6 @@ created. Simply choose the build directory when loading the extension into Chrom
 ## TODO
 
 0. [ ] Add set to the chrome-storage lib.
-0. [ ] Add check for in-between times if hangout is not open.
-0. [ ] Add better validation for times.
 0. [x] ~~Add desktop notification for load-warning.~~
 0. [x] ~~Add better time selector for start/end time.~~
 0. [x] ~~Add validation to only allow hangout urls.~~

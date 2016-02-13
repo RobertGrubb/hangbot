@@ -46,6 +46,23 @@ class startListener {
                         ' ' +
                         listener.storage.data.startMeridiem;
 
+        // Get unix timestamps of both start and now times.
+        let nowUnix = moment().unix();
+        let startUnix = moment(startTime, 'h:mm A').unix();
+
+        /**
+         * If in the middle of the start and end time, and now tab
+         * is set for the hangout. Go ahead and open another.
+         *
+         * Situation where this may happen:
+         *
+         * If chrome was closed, and then opened while the listener is
+         * still running, then we need to open the hangout.
+         */
+        if (nowUnix > startUnix && !listener.storage.data.tabId) {
+          listener.openTab();
+        }
+
         // Get 5 minutes before start time for notification
         let oneMinuteBefore = moment(startTime, 'h:mm A')
           .subtract(1, 'minutes')
