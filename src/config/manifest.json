@@ -2,8 +2,8 @@
   "manifest_version": 2,
 
   "name": "HangBot",
-  "description": "HangBot is a tool that loads Google Hangouts automatically based on settings you provide. No more having to remember those daily meeting times!",
-  "version": "1.0.2",
+  "description": "HangBot is a tool that loads Google Hangouts automatically based on settings you provide.",
+  "version": "1.0.3",
 
   "icons": {
     "16": "ext/assets/images/icons/icon_16.png",

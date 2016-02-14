@@ -50,25 +50,19 @@ class startListener {
         let nowUnix = moment().unix();
         let startUnix = moment(startTime, 'h:mm A').unix();
 
-        /**
-         * If in the middle of the start and end time, and now tab
-         * is set for the hangout. Go ahead and open another.
-         *
-         * Situation where this may happen:
-         *
-         * If chrome was closed, and then opened while the listener is
-         * still running, then we need to open the hangout.
-         */
-        if (nowUnix > startUnix && !listener.storage.data.tabId) {
-          listener.openTab();
-        }
-
         // Get 5 minutes before start time for notification
         let oneMinuteBefore = moment(startTime, 'h:mm A')
           .subtract(1, 'minutes')
           .format('h:mm A');
 
-        if (oneMinuteBefore === now && !listener.notified) {
+        // If the startTime is the current time
+        if (startTime === now) {
+
+          // Open the hangout
+          listener.openTab();
+
+        } else if (oneMinuteBefore === now && !listener.notified) {
+
           // Notifiy:
           listener.notifications.showNotification(
             'HangBot is Excited!',
@@ -76,12 +70,17 @@ class startListener {
           );
 
           listener.notified = true;
-        }
 
-        // If the startTime is the current time
-        if (startTime === now) {
-
-          // Open the hangout
+        } else if (nowUnix > startUnix && !listener.storage.data.tabId) {
+          /**
+           * If in the middle of the start and end time, and now tab
+           * is set for the hangout. Go ahead and open another.
+           *
+           * Situation where this may happen:
+           *
+           * If chrome was closed, and then opened while the listener is
+           * still running, then we need to open the hangout.
+           */
           listener.openTab();
         }
       }, (1000 * listener.refreshRate));
