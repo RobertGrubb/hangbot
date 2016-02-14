@@ -46,9 +46,16 @@ class startListener {
                         ' ' +
                         listener.storage.data.startMeridiem;
 
+        let endTime = listener.storage.data.endHour +
+                      ':' +
+                      listener.storage.data.endMins +
+                      ' ' +
+                      listener.storage.data.endMeridiem;
+
         // Get unix timestamps of both start and now times.
         let nowUnix = moment().unix();
         let startUnix = moment(startTime, 'h:mm A').unix();
+        let endUnix = moment(endTime, 'h:mm A').unix();
 
         // Get 5 minutes before start time for notification
         let oneMinuteBefore = moment(startTime, 'h:mm A')
@@ -71,7 +78,10 @@ class startListener {
 
           listener.notified = true;
 
-        } else if (nowUnix > startUnix && !listener.storage.data.tabId) {
+        } else if (nowUnix > startUnix &&
+          nowUnix < endUnix &&
+          !listener.storage.data.tabId) {
+
           /**
            * If in the middle of the start and end time, and now tab
            * is set for the hangout. Go ahead and open another.

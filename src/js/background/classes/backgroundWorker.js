@@ -13,6 +13,13 @@ class backgroundWorker {
     this.stopListener = stopListener;
   }
 
+  removeExistingTab() {
+    if (!chrome.runtime.lastError) {
+      chrome.tabs.remove(this.storage.data.tabId);
+      chrome.storage.local.set({tabId: false});
+    }
+  }
+
   // Initializes the background process
   initialize()  {
 
@@ -24,8 +31,11 @@ class backgroundWorker {
 
       // If tab exists on load, remove it.
       if (data.tabId) {
-        chrome.tabs.remove(data.tabId);
-        chrome.storage.local.set({tabId: false});
+
+        chrome.tabs.get(
+          data.tabId,
+          bgWorker.removeExistingTab
+        );
       }
 
       // If initial data is set to start, call our startTimeListener method.
